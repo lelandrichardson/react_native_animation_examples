@@ -12,12 +12,21 @@ var Icon = React.createClass({
         flutter: PropTypes.any, // Animated | Number
     },
     render: function () {
+        var { flutter } = this.props;
         return (
             <Animated.View
                 style={[
                     styles.container,
                     {
-                        backgroundColor: this.props.color
+                        backgroundColor: this.props.color,
+                        transform: [
+                            {
+                                scale: flutter.interpolate({
+                                    inputRange: [0, 0.8, 1, 1.2],
+                                    outputRange: [0.8, 0.8, 1, 1.2]
+                                })
+                            }
+                        ]
                     }
                 ]}>
             </Animated.View>

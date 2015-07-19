@@ -42,10 +42,36 @@ var ITEMS = [
         title: "Photos",
         time: "Jan 9, 2014"
     },
+    {
+        id: 4,
+        icon: "list",
+        color: "#6da2ff",
+        title: "Meeting Minutes",
+        time: "Mar 9, 2015"
+    },
+    {
+        id: 5,
+        icon: "folder",
+        color: "#cbcbcf",
+        title: "Favorite Photos",
+        time: "Feb 3, 2015"
+    },
+    {
+        id: 6,
+        icon: "folder",
+        color: "#cbcbcf",
+        title: "Photos",
+        time: "Jan 9, 2014"
+    },
 ];
 
+ITEMS = ITEMS.map(item => ({
+    ...item,
+    flutter: new Animated.Value(1),
+    loading: new Animated.Value(1),
+}));
+
 var ITEM_TO_ADD = {
-    id: 4,
     icon: "window",
     color: "#fdc56d",
     title: "Magic Cube Show",
@@ -61,30 +87,64 @@ var PullToRefresh = React.createClass({
         };
     },
 
+    onScroll(e) {
+        this.state.scroll.setValue(e.nativeEvent.contentOffset.y);
+    },
+
     componentWillMount() {
 
+    },
+
+    insertItem() {
+        var newItem = {
+            ...ITEM_TO_ADD,
+            id: ITEMS.length + 1,
+            flutter: new Animated.Value(0),
+            loading: new Animated.Value(0),
+        };
+        ITEMS.unshift(newItem);
+        Animated.spring(newItem.flutter, {
+            toValue: 1,
+            friction: 2,
+            tension: 80,
+        }).start();
+        Animated.timing(newItem.loading, {
+            toValue: 1,
+            duration: 250
+        }).start();
+        this.forceUpdate();
     },
 
     render: function () {
 
         var { scroll } = this.state;
 
+        var stretch = scroll.interpolate({
+            inputRange: [-100, 0, 1],
+            outputRange: [1, 0, 0]
+        });
+
         return (
-            <ScrollView
-                contentInset={{ top: 0 }}
-                style={styles.container}
-                contentContainerStyle={styles.content}
-                onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: scroll }}}])}>
-                <ForestView />
-                <View>
-                    <View style={styles.listContainer}>
-                        {ITEMS.map(item => (
-                            <ListItem key={item.id} item={item} />
-                        ))}
+            <View style={styles.container}>
+                <ForestView stretch={stretch} />
+                <ScrollView
+                    contentInset={{ top: -18 }}
+                    style={{ backgroundColor: 'transparent', flex: 1 }}
+                    contentContainerStyle={styles.content}
+                    scrollEventThrottle={16 /* get all events */ }
+                    onScroll={this.onScroll}
+                    /* onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: scroll }}}])}*/>
+                    <View style={[styles.window]}/>
+                    <View style={{ backgroundColor: '#fff'}}>
+                        <View style={styles.listContainer}>
+                            {ITEMS.map(item => (
+                                <ListItem key={item.id} item={item} />
+                            ))}
+                        </View>
+                        <RefreshButton onClick={this.insertItem} stretch={stretch}  />
                     </View>
-                    <RefreshButton />
-                </View>
-            </ScrollView>
+                </ScrollView>
+            </View>
         );
     }
 });
@@ -93,10 +153,14 @@ var PullToRefresh = React.createClass({
 var styles = StyleSheet.create({
     container: {
         backgroundColor: '#7dcfcb',
+        flex: 1,
     },
     content: {
         flex: 1,
-        backgroundColor: '#fff',
+        //backgroundColor: '#fff',
+    },
+    window: {
+        height: 180,
     },
     listContainer: {
         backgroundColor: '#fff',

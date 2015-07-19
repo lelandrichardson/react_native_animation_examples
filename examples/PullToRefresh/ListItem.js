@@ -3,6 +3,7 @@ var {
     StyleSheet,
     View,
     Text,
+    Animated,
     } = React;
 
 var Icon = require('./Icon');
@@ -15,7 +16,7 @@ var ListItem = React.createClass({
             <View style={styles.container}>
                 <Icon
                     color={item.color}
-                    flutter={1}
+                    flutter={item.flutter}
                     />
                 <View style={{ flex: 1 }}>
                     <Text style={styles.title}>{item.title}</Text>
