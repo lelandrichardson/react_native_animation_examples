@@ -18,6 +18,7 @@ var { width, height } = Dimensions.get('window');
 var ListItem = require('./ListItem');
 var ForestView = require('./ForestView');
 var RefreshButton = require('./RefreshButton');
+var LoadingAirplane = require('./LoadingAirplane');
 
 
 var ITEMS = [
@@ -69,6 +70,7 @@ ITEMS = ITEMS.map(item => ({
     ...item,
     flutter: new Animated.Value(1),
     loading: new Animated.Value(1),
+    inserting: new Animated.Value(1),
 }));
 
 var ITEM_TO_ADD = {
@@ -83,7 +85,8 @@ var PullToRefresh = React.createClass({
     getInitialState() {
         var scroll = new Animated.Value(0);
         return {
-            scroll
+            scroll,
+            loading: new Animated.Value(0)
         };
     },
 
@@ -101,23 +104,42 @@ var PullToRefresh = React.createClass({
             id: ITEMS.length + 1,
             flutter: new Animated.Value(0),
             loading: new Animated.Value(0),
+            inserting: new Animated.Value(0),
         };
         ITEMS.unshift(newItem);
-        Animated.spring(newItem.flutter, {
-            toValue: 1,
-            friction: 2,
-            tension: 80,
-        }).start();
-        Animated.timing(newItem.loading, {
-            toValue: 1,
-            duration: 250
-        }).start();
+        Animated.sequence([
+            Animated.timing(newItem.inserting, {
+                toValue: 1,
+                duration: 200
+            }),
+            Animated.parallel([
+                Animated.spring(newItem.flutter, {
+                    toValue: 1,
+                    friction: 1.2,
+                    tension: 70,
+                }),
+                Animated.timing(newItem.loading, {
+                    toValue: 1,
+                    duration: 250,
+                    //delay: 30,
+                })
+            ])
+        ]).start();
         this.forceUpdate();
+    },
+
+    loadMore() {
+        this.state.loading.setValue(0);
+        Animated.timing(this.state.loading, {
+            toValue: 1,
+            duration: 2800,
+            easing: Easing.linear
+        }).start();
     },
 
     render: function () {
 
-        var { scroll } = this.state;
+        var { scroll, loading } = this.state;
 
         var stretch = scroll.interpolate({
             inputRange: [-100, 0, 1],
@@ -127,6 +149,7 @@ var PullToRefresh = React.createClass({
         return (
             <View style={styles.container}>
                 <ForestView stretch={stretch} />
+
                 <ScrollView
                     contentInset={{ top: -18 }}
                     style={{ backgroundColor: 'transparent', flex: 1 }}
@@ -141,9 +164,10 @@ var PullToRefresh = React.createClass({
                                 <ListItem key={item.id} item={item} />
                             ))}
                         </View>
-                        <RefreshButton onClick={this.insertItem} stretch={stretch}  />
+                        <RefreshButton onClick={this.loadMore} stretch={stretch}  />
                     </View>
                 </ScrollView>
+                <LoadingAirplane loading={loading} />
             </View>
         );
     }

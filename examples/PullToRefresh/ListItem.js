@@ -12,19 +12,39 @@ var ListItem = React.createClass({
 
     render: function () {
         var { item } = this.props;
+        var { loading, inserting, flutter } = item;
         return (
-            <View style={styles.container}>
+            <Animated.View style={[styles.container, {
+                height: inserting.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [0, 74]
+                }),
+                paddingVertical: inserting.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [0, 17]
+                })
+            }]}>
                 <Icon
                     color={item.color}
-                    flutter={item.flutter}
+                    flutter={flutter}
                     />
-                <View style={{ flex: 1 }}>
-                    <Text style={styles.title}>{item.title}</Text>
-                    <Text style={styles.time}>{item.time}</Text>
-                </View>
-                <View style={styles.info}>
-                </View>
-            </View>
+                <Animated.View style={[{ flexDirection: 'row', flex: 1}, {
+                    transform: [
+                        {
+                            rotateY: loading.interpolate({
+                                inputRange: [0, 1],
+                                outputRange: ['90deg', '0deg']
+                            })
+                        }
+                    ]
+                }]}>
+                    <View style={{ flex: 1 }}>
+                        <Text style={styles.title}>{item.title}</Text>
+                        <Text style={styles.time}>{item.time}</Text>
+                    </View>
+                    <View style={styles.info} />
+                </Animated.View>
+            </Animated.View>
         );
     }
 });
@@ -34,7 +54,7 @@ var styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
         alignItems: 'center',
-        paddingVertical: 17,
+        //paddingVertical: 17,
     },
     title: {
         color: '#434343',

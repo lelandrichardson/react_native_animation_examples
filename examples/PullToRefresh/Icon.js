@@ -19,11 +19,15 @@ var Icon = React.createClass({
                     styles.container,
                     {
                         backgroundColor: this.props.color,
-                        transform: [
-                            {
-                                scale: flutter.interpolate({
+                        transform: [{
+                                rotateX: flutter.interpolate({
                                     inputRange: [0, 0.8, 1, 1.2],
-                                    outputRange: [0.8, 0.8, 1, 1.2]
+                                    outputRange: ['90deg', '15deg', '0deg', '-15deg']
+                                })
+                            }, {
+                                rotateY: flutter.interpolate({
+                                    inputRange: [0, 0.8, 1, 1.2],
+                                    outputRange: ['0deg', '5deg', '0deg', '-5deg']
                                 })
                             }
                         ]
