@@ -26,6 +26,7 @@ var ListItem = React.createClass({
             }]}>
                 <Icon
                     color={item.color}
+                    name={item.icon}
                     flutter={flutter}
                     />
                 <Animated.View style={[{ flexDirection: 'row', flex: 1}, {

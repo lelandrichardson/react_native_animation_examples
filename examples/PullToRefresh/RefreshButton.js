@@ -7,16 +7,17 @@ var {
     PropTypes,
     TouchableOpacity,
     } = React;
+var { Icon } = require('react-native-icons');
 
 var RefreshButton = React.createClass({
     propTypes: {
         stretch: PropTypes.any, // Animated
-        onClick: PropTypes.func,
+        onPress: PropTypes.func,
     },
     render: function () {
-        var { stretch, onClick } = this.props;
+        var { stretch, onPress } = this.props;
         return (
-            <TouchableOpacity onPress={onClick}>
+            <TouchableOpacity onPress={onPress}>
                 <Animated.View style={[styles.button, {
                     transform: [
                         {
@@ -27,7 +28,11 @@ var RefreshButton = React.createClass({
                         }
                     ]
                 }]}>
-                    <Text style={styles.icon}>W</Text>
+                    <Icon
+                        name="fontawesome|paper-plane"
+                        size={80}
+                        color="#fff"
+                        />
                 </Animated.View>
             </TouchableOpacity>
         );

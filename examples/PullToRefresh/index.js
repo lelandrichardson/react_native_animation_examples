@@ -74,7 +74,7 @@ ITEMS = ITEMS.map(item => ({
 }));
 
 var ITEM_TO_ADD = {
-    icon: "window",
+    icon: "calendar-o",
     color: "#fdc56d",
     title: "Magic Cube Show",
     time: "Mar 15, 2015"
@@ -164,7 +164,7 @@ var PullToRefresh = React.createClass({
                                 <ListItem key={item.id} item={item} />
                             ))}
                         </View>
-                        <RefreshButton onClick={this.loadMore} stretch={stretch}  />
+                        <RefreshButton onPress={this.insertItem} stretch={stretch}  />
                     </View>
                 </ScrollView>
                 <LoadingAirplane loading={loading} />

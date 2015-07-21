@@ -4,6 +4,7 @@ var {
     View,
     Animated,
     } = React;
+var { Icon } = require('react-native-icons');
 
 var { width, height } = require('Dimensions').get('window');
 
@@ -76,19 +77,40 @@ var LoadingAirplane = React.createClass({
                         ]
                     }
                 ]}
-            />
+            >
+                <Icon
+                    name="ion|ios-paperplane"
+                    size={50}
+                    color="#ffffff"
+                    style={styles.icon}
+                    />
+            </Animated.View>
         );
     }
 });
+var ICON_SIZE = 40;
+var SIZE = 30;
 
 var styles = StyleSheet.create({
     container: {
-        width: 40,
-        height: 20,
+        width: ICON_SIZE,
+        height: ICON_SIZE,
         position: 'absolute',
-        backgroundColor: '#fff',
+        backgroundColor: 'transparent',
         top: 180,
-        left: 0,
+        left: 6,
+        marginTop: -ICON_SIZE / 2,
+        marginLeft: -ICON_SIZE / 2,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    icon: {
+        width: ICON_SIZE,
+        height: ICON_SIZE,
+        backgroundColor: 'transparent',
+        transform: [
+            { rotateZ: '40deg'}
+        ]
     }
 });
 
