@@ -15,7 +15,7 @@ var RefreshButton = React.createClass({
         onPress: PropTypes.func,
     },
     render: function () {
-        var { stretch, onPress } = this.props;
+        var { stretch, onPress,isLoading } = this.props;
         return (
             <TouchableOpacity onPress={onPress}>
                 <Animated.View style={[styles.button, {
@@ -28,11 +28,12 @@ var RefreshButton = React.createClass({
                         }
                     ]
                 }]}>
-                    <Icon
-                        name="fontawesome|paper-plane"
-                        size={80}
-                        color="#fff"
-                        />
+                    {!isLoading && <Icon
+                        name="ion|ios-paperplane"
+                        size={50}
+                        color="#ffffff"
+                        style={styles.icon}
+                        />}
                 </Animated.View>
             </TouchableOpacity>
         );
@@ -40,6 +41,7 @@ var RefreshButton = React.createClass({
 });
 
 var SIZE = 58;
+var ICON_SIZE = 40;
 
 var styles = StyleSheet.create({
     button: {
@@ -60,9 +62,12 @@ var styles = StyleSheet.create({
         alignItems: 'center'
     },
     icon: {
-        color: '#fff',
-        fontSize: 20,
-        fontWeight: 'bold',
+        width: ICON_SIZE,
+        height: ICON_SIZE,
+        backgroundColor: 'transparent',
+        transform: [
+            { rotateZ: '40deg'}
+        ]
     }
 });
 

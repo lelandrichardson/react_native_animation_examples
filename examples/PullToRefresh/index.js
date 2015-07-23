@@ -9,7 +9,8 @@ var {
     StyleSheet,
     View,
     Animated,
-    ScrollView
+    ScrollView,
+    PanResponder,
     } = React;
 var Dimensions = require('Dimensions');
 var Easing = require('Easing');
@@ -64,6 +65,27 @@ var ITEMS = [
         title: "Photos",
         time: "Jan 9, 2014"
     },
+    {
+        id: 7,
+        icon: "list",
+        color: "#6da2ff",
+        title: "Meeting Minutes",
+        time: "Mar 9, 2015"
+    },
+    {
+        id: 8,
+        icon: "folder",
+        color: "#cbcbcf",
+        title: "Favorite Photos",
+        time: "Feb 3, 2015"
+    },
+    {
+        id: 9,
+        icon: "folder",
+        color: "#cbcbcf",
+        title: "Photos",
+        time: "Jan 9, 2014"
+    },
 ];
 
 ITEMS = ITEMS.map(item => ({
@@ -80,22 +102,87 @@ var ITEM_TO_ADD = {
     time: "Mar 15, 2015"
 };
 
+var MIN = -220;
+var MAX = 0;
+
 var PullToRefresh = React.createClass({
 
     getInitialState() {
-        var scroll = new Animated.Value(0);
         return {
-            scroll,
-            loading: new Animated.Value(0)
+            scroll: new Animated.Value(0),
+            loading: new Animated.Value(0),
+            isLoading: false,
         };
     },
-
-    onScroll(e) {
-        this.state.scroll.setValue(e.nativeEvent.contentOffset.y);
-    },
+    responder: null,
 
     componentWillMount() {
+        this.responder = PanResponder.create({
+            onStartShouldSetPanResponder: () => true,
+            onMoveShouldSetPanResponder: () => true,
+            onPanResponderGrant: () => {
+                this.state.scroll.setOffset(this.state.scroll._value);
+                this.state.scroll.setValue(0);
+            },
+            onPanResponderMove: (_, { dy, y0 }) => {
+                var scroll = this.state.scroll._offset + dy;
 
+                if (scroll > MAX) {
+                    scroll = MAX + (scroll - MAX) / 4;
+                }
+                if (scroll < MIN) {
+                    scroll = MIN - (MIN - scroll) / 4;
+                }
+                scroll = scroll - this.state.scroll._offset;
+                this.state.scroll.setValue(scroll);
+            },
+            onPanResponderRelease: (_, { vy, dy }) => {
+                var { scroll } = this.state;
+                scroll.flattenOffset();
+
+                if (scroll._value < MIN) {
+                    Animated.spring(scroll, {
+                        toValue: MIN,
+                        velocity: vy
+                    }).start();
+                } else if (scroll._value > MAX) {
+                    Animated.spring(scroll, {
+                        toValue: MAX,
+                        velocity: vy,
+                        friction: 3,
+                        tension: 60,
+                    }).start();
+                    this._listener = scroll.addListener(({ value }) => {
+                        if (value > 0) {
+                            scroll.removeListener(this._listener);
+                            this.loadMore();
+                        }
+                    });
+                } else {
+                    Animated.decay(scroll, {
+                        velocity: vy,
+                    }).start(() => {
+                        scroll.removeListener(this._listener);
+                    });
+
+                    this._listener = scroll.addListener(( { value } ) => {
+                        if (value < MIN) {
+                            scroll.removeListener(this._listener);
+                            Animated.spring(scroll, {
+                                toValue: MIN,
+                                velocity: vy
+                            }).start();
+                        } else if (value > MAX) {
+                            scroll.removeListener(this._listener);
+                            Animated.spring(scroll, {
+                                toValue: MAX,
+                                velocity: vy
+                            }).start();
+                        }
+                    });
+                }
+            }
+        });
     },
 
     insertItem() {
@@ -129,33 +216,41 @@ var PullToRefresh = React.createClass({
     },
 
     loadMore() {
+        this.setState({ isLoading: true });
         this.state.loading.setValue(0);
         Animated.timing(this.state.loading, {
             toValue: 1,
             duration: 2800,
             easing: Easing.linear
-        }).start(this.insertItem);
+        }).start(() => {
+            this.setState({ isLoading: false });
+            this.insertItem()
+        });
     },
 
     render: function () {
 
-        var { scroll, loading } = this.state;
+        var { scroll, loading, isLoading } = this.state;
 
         var stretch = scroll.interpolate({
-            inputRange: [-100, 0, 1],
-            outputRange: [1, 0, 0]
+            inputRange: [-1, 0, 100],
+            outputRange: [0, 0, 1]
         });
 
         return (
             <View style={styles.container}>
                 <ForestView stretch={stretch} />
-                <ScrollView
+                <Animated.View
                     contentInset={{ top: -18 }}
-                    style={{ backgroundColor: 'transparent', flex: 1 }}
-                    contentContainerStyle={styles.content}
-                    scrollEventThrottle={16 /* get all events */ }
-                    onScroll={this.onScroll}
-                    /* onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: scroll }}}])}*/>
+                    style={[{ backgroundColor: 'transparent', flex: 1 },{
+                        transform: [
+                            {
+                                translateY: scroll
+                            }
+                        ]
+                    }]}
+                    /*contentContainerStyle={styles.content}*/
+                    {...this.responder.panHandlers}>
                     <View style={[styles.window]}/>
                     <View style={{ backgroundColor: '#fff'}}>
                         <View style={styles.listContainer}>
@@ -163,10 +258,13 @@ var PullToRefresh = React.createClass({
                                 <ListItem key={item.id} item={item} />
                             ))}
                         </View>
-                        <RefreshButton onPress={this.loadMore} stretch={stretch}  />
+                        <RefreshButton
+                            onPress={this.loadMore}
+                            stretch={stretch}
+                            isLoading={isLoading} />
                     </View>
-                </ScrollView>
-                <LoadingAirplane loading={loading} />
+                </Animated.View>
+                {isLoading && <LoadingAirplane loading={loading} />}
             </View>
         );
     }
