@@ -13,6 +13,7 @@ var ListItem = React.createClass({
     render: function () {
         var { item } = this.props;
         var { loading, inserting, flutter } = item;
+
         return (
             <Animated.View style={[styles.container, {
                 height: inserting.interpolate({
@@ -35,9 +36,10 @@ var ListItem = React.createClass({
                             rotateY: loading.interpolate({
                                 inputRange: [0, 1],
                                 outputRange: ['90deg', '0deg']
-                            })
+                            }),
                         }
-                    ]
+                    ],
+                    transformOrigin: { x: -143 }
                 }]}>
                     <View style={{ flex: 1 }}>
                         <Text style={styles.title}>{item.title}</Text>

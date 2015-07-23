@@ -110,7 +110,7 @@ var PullToRefresh = React.createClass({
         Animated.sequence([
             Animated.timing(newItem.inserting, {
                 toValue: 1,
-                duration: 200
+                duration: 150
             }),
             Animated.parallel([
                 Animated.spring(newItem.flutter, {
@@ -120,7 +120,7 @@ var PullToRefresh = React.createClass({
                 }),
                 Animated.timing(newItem.loading, {
                     toValue: 1,
-                    duration: 250,
+                    duration: 200,
                     //delay: 30,
                 })
             ])
@@ -134,7 +134,7 @@ var PullToRefresh = React.createClass({
             toValue: 1,
             duration: 2800,
             easing: Easing.linear
-        }).start();
+        }).start(this.insertItem);
     },
 
     render: function () {
@@ -149,7 +149,6 @@ var PullToRefresh = React.createClass({
         return (
             <View style={styles.container}>
                 <ForestView stretch={stretch} />
-
                 <ScrollView
                     contentInset={{ top: -18 }}
                     style={{ backgroundColor: 'transparent', flex: 1 }}
@@ -164,7 +163,7 @@ var PullToRefresh = React.createClass({
                                 <ListItem key={item.id} item={item} />
                             ))}
                         </View>
-                        <RefreshButton onPress={this.insertItem} stretch={stretch}  />
+                        <RefreshButton onPress={this.loadMore} stretch={stretch}  />
                     </View>
                 </ScrollView>
                 <LoadingAirplane loading={loading} />
