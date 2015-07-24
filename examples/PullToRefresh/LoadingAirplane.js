@@ -10,7 +10,7 @@ var { width, height } = require('Dimensions').get('window');
 
 var frames = (anim, outputRange) => anim.interpolate({
     inputRange: KEYFRAMES,
-    outputRange
+    outputRange,
 });
 
 var WIDTH = width;
@@ -57,10 +57,10 @@ var LoadingAirplane = React.createClass({
         ]);
 
         var rotateZ = frames(loading, [
-            '-40deg', // <SwipeRight>
-            '-10deg', // </SwipeRight><OffScreen>
-            '160deg', // </OffScreen><SwipeLeft>
-            '170deg', // </SwipeLeft><OffScreen>
+            '-45deg', // <SwipeRight>
+            '0deg', // </SwipeRight><OffScreen>
+            '170deg', // </OffScreen><SwipeLeft>
+            '180deg', // </SwipeLeft><OffScreen>
               '0deg', // </OffScreen><SlideIn>
               '0deg', // </SlideIn>
         ]);
