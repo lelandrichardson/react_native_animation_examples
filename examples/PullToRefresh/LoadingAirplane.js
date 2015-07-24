@@ -7,20 +7,24 @@ var {
 var { Icon } = require('react-native-icons');
 
 var { width, height } = require('Dimensions').get('window');
+var Easing = require('Easing');
 
-var frames = (anim, outputRange) => anim.interpolate({
+var frames = (anim, outputRange, easing) => anim.interpolate({
     inputRange: KEYFRAMES,
     outputRange,
+    easing
 });
 
 var WIDTH = width;
 var HEIGHT = 180;
+var easing = Easing.bezier(.42,.74,.57,.85, (1000 / 60 / 4000) / 4);
+var easingX = Easing.bezier(.78,.68,.57,.85, (1000 / 60 / 4000) / 4);
 
 var KEYFRAMES = [
     0.00, // <SwipeRight>
-    0.15, // </SwipeRight><OffScreen>
+    0.20, // </SwipeRight><OffScreen>
     0.40, // </OffScreen><SwipeLeft>
-    0.55, // </SwipeLeft><OffScreen>
+    0.70, // </SwipeLeft><OffScreen>
     0.85, // </OffScreen><SlideIn>
     1.00, // </SlideIn>
 ];
@@ -36,7 +40,7 @@ var LoadingAirplane = React.createClass({
             HEIGHT * -0.20, // </SwipeLeft><OffScreen>
             HEIGHT * -0.00, // </OffScreen><SlideIn>
             HEIGHT * -0.00, // </SlideIn>
-        ]);
+        ], easing);
 
         var translateX = frames(loading, [
             WIDTH * 0.10, // <SwipeRight>
@@ -45,16 +49,16 @@ var LoadingAirplane = React.createClass({
                     -100, // </SwipeLeft><OffScreen>
                     -100, // </OffScreen><SlideIn>
             WIDTH * 0.10, // </SlideIn>
-        ]);
+        ], easing);
 
         var scale = frames(loading, [
             1.00, // <SwipeRight>
-            0.50, // </SwipeRight><OffScreen>
+            0.30, // </SwipeRight><OffScreen>
             0.50, // </OffScreen><SwipeLeft>
-            0.90, // </SwipeLeft><OffScreen>
+            0.80, // </SwipeLeft><OffScreen>
             1.00, // </OffScreen><SlideIn>
             1.00, // </SlideIn>
-        ]);
+        ], easing);
 
         var rotateZ = frames(loading, [
             '-45deg', // <SwipeRight>
