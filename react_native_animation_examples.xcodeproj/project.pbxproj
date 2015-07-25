@@ -28,6 +28,9 @@
 		CEDE41241B5D6DF800511B5C /* foundation-icons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CEDE41201B5D6DF800511B5C /* foundation-icons.ttf */; };
 		CEDE41251B5D6DF800511B5C /* ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CEDE41211B5D6DF800511B5C /* ionicons.ttf */; };
 		CEDE41261B5D6DF800511B5C /* zocial-regular-webfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CEDE41221B5D6DF800511B5C /* zocial-regular-webfont.ttf */; };
+		CEDE421C1B633BD500511B5C /* libRNSvg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CEDE421B1B633BC800511B5C /* libRNSvg.a */; };
+		CEDE421E1B633BE700511B5C /* libxml2.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = CEDE421D1B633BE700511B5C /* libxml2.2.dylib */; };
+		CEDE42201B633C7F00511B5C /* libSVGKit-iOS.1.2.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CEDE421F1B633C7F00511B5C /* libSVGKit-iOS.1.2.0.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -115,6 +118,13 @@
 			remoteGlobalIDString = 2F5A3EB81ACDBF8000439386;
 			remoteInfo = ReactNativeIcons;
 		};
+		CEDE421A1B633BC800511B5C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CEDE42141B633BC800511B5C /* RNSvg.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 134814201AA4EA6300B7C361;
+			remoteInfo = RNSvg;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -144,6 +154,9 @@
 		CEDE41201B5D6DF800511B5C /* foundation-icons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "foundation-icons.ttf"; path = "node_modules/react-native-icons/ios/ReactNativeIcons/Libraries/FontAwesomeKit/foundation-icons.ttf"; sourceTree = "<group>"; };
 		CEDE41211B5D6DF800511B5C /* ionicons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = ionicons.ttf; path = "node_modules/react-native-icons/ios/ReactNativeIcons/Libraries/FontAwesomeKit/ionicons.ttf"; sourceTree = "<group>"; };
 		CEDE41221B5D6DF800511B5C /* zocial-regular-webfont.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "zocial-regular-webfont.ttf"; path = "node_modules/react-native-icons/ios/ReactNativeIcons/Libraries/FontAwesomeKit/zocial-regular-webfont.ttf"; sourceTree = "<group>"; };
+		CEDE42141B633BC800511B5C /* RNSvg.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNSvg.xcodeproj; path = "../react-native-svg/Libraries/RNSvg.xcodeproj"; sourceTree = "<group>"; };
+		CEDE421D1B633BE700511B5C /* libxml2.2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.2.dylib; path = usr/lib/libxml2.2.dylib; sourceTree = SDKROOT; };
+		CEDE421F1B633C7F00511B5C /* libSVGKit-iOS.1.2.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libSVGKit-iOS.1.2.0.a"; path = "../../Library/Developer/Xcode/DerivedData/react_native_animation_examples-bnbrxxasbuldvvgkbzseupqtjpnn/Build/Products/Debug-iphoneos/libSVGKit-iOS.1.2.0.a"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -158,6 +171,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CEDE42201B633C7F00511B5C /* libSVGKit-iOS.1.2.0.a in Frameworks */,
+				CEDE421E1B633BE700511B5C /* libxml2.2.dylib in Frameworks */,
+				CEDE421C1B633BD500511B5C /* libRNSvg.a in Frameworks */,
 				CEDE411E1B5D6D8900511B5C /* libReactNativeIcons.a in Frameworks */,
 				146834051AC3E58100842450 /* libReact.a in Frameworks */,
 				00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */,
@@ -281,6 +297,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				CEDE42141B633BC800511B5C /* RNSvg.xcodeproj */,
 				CEDE410E1B5D6D5200511B5C /* ReactNativeIcons.xcodeproj */,
 				146833FF1AC3E56700842450 /* React.xcodeproj */,
 				00C302A71ABCB8CE00DB3ED1 /* RCTActionSheet.xcodeproj */,
@@ -307,6 +324,8 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				CEDE421F1B633C7F00511B5C /* libSVGKit-iOS.1.2.0.a */,
+				CEDE421D1B633BE700511B5C /* libxml2.2.dylib */,
 				CEDE411F1B5D6DF800511B5C /* FontAwesome.otf */,
 				CEDE41201B5D6DF800511B5C /* foundation-icons.ttf */,
 				CEDE41211B5D6DF800511B5C /* ionicons.ttf */,
@@ -333,6 +352,14 @@
 			isa = PBXGroup;
 			children = (
 				CEDE411D1B5D6D5300511B5C /* libReactNativeIcons.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		CEDE42151B633BC800511B5C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				CEDE421B1B633BC800511B5C /* libRNSvg.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -446,6 +473,10 @@
 					ProductGroup = CEDE410F1B5D6D5200511B5C /* Products */;
 					ProjectRef = CEDE410E1B5D6D5200511B5C /* ReactNativeIcons.xcodeproj */;
 				},
+				{
+					ProductGroup = CEDE42151B633BC800511B5C /* Products */;
+					ProjectRef = CEDE42141B633BC800511B5C /* RNSvg.xcodeproj */;
+				},
 			);
 			projectRoot = "";
 			targets = (
@@ -531,6 +562,13 @@
 			fileType = archive.ar;
 			path = libReactNativeIcons.a;
 			remoteRef = CEDE411C1B5D6D5300511B5C /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		CEDE421B1B633BC800511B5C /* libRNSvg.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRNSvg.a;
+			remoteRef = CEDE421A1B633BC800511B5C /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -648,6 +686,10 @@
 				);
 				INFOPLIST_FILE = iOS/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/react_native_animation_examples-bnbrxxasbuldvvgkbzseupqtjpnn/Build/Products/Debug-iphoneos",
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = react_native_animation_examples;
 			};
@@ -664,6 +706,10 @@
 				);
 				INFOPLIST_FILE = iOS/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/react_native_animation_examples-bnbrxxasbuldvvgkbzseupqtjpnn/Build/Products/Debug-iphoneos",
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = react_native_animation_examples;
 			};

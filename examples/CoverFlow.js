@@ -146,7 +146,7 @@ var CoverFlow = React.createClass({
                     }).start();
                 } else {
                     Animated.spring(x, {
-                        toValue: this.closestCenter(x._value)
+                        toValue: this.momentumCenter(x._value, vx)
                     }).start(() => {
                         x.removeListener(this._listener);
                     });
@@ -176,6 +176,26 @@ var CoverFlow = React.createClass({
         return Math.floor(x / SPACING) * SPACING + plus;
     },
 
+    momentumCenter(x0, vx) {
+        var t = 0;
+        var deceleration = 0.997;
+        var x1 = x0;
+        var x = x1;
+
+        while (true) {
+            t += 16;
+            x = x0 + (vx / (1 - deceleration)) *
+                      (1 - Math.exp(-(1 - deceleration) * t));
+            if (Math.abs(x-x1) < 0.1) {
+                x1 = x;
+                break;
+            }
+            x1 = x;
+        }
+        return this.closestCenter(x1);
+
+    },
+
     render: function () {
 
         var { x, translations } = this.state;
@@ -188,28 +208,6 @@ var CoverFlow = React.createClass({
                 {IMAGES.map((img, i) => {
 
                     var dx = translations[i];
-
-                    //var scale = dx.interpolate({
-                    //    inputRange:  [-dCenter-1, -dCenter,   0, dCenter, dCenter+1],
-                    //    outputRange: [       1.2,      1.2, 0.8,     1.2,       1.2]
-                    //});
-                    //
-                    //var dy = dx.interpolate({
-                    //    inputRange:  [-dCenter-1, -dCenter,   0, dCenter, dCenter+1],
-                    //    outputRange: [         0,        0, -30,       0,         0]
-                    //});
-                    //
-                    //var rotate = dx.interpolate({
-                    //    inputRange: [-dCenter-1, -dCenter, 0, dCenter, dCenter+1],
-                    //    outputRange: [MAXROTATE, MAXROTATE, 0, -MAXROTATE, -MAXROTATE]
-                    //});
-                    //
-                    //var transformMatrix = [
-                    //    +0.01, +0.0, +0.0, rotate,
-                    //    +0.0, +1.0, +0.0,   +0.0,
-                    //    +0.0, +0.0, +1.0,   +0.0,
-                    //      dx,   dy, +0.0,  scale
-                    //];
 
                     var translateX = {
                         translateX: dx

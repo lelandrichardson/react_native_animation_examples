@@ -8,6 +8,8 @@
   "dependencies": {
     "react-native": "file:../react-native",
     "react-native-icons": "^0.2.0",
+    "react-native-svg": "git+https://github.com/brentvatne/react-native-svg.git",
+    "react-timer-mixin": "^0.13.2",
     "three": "^0.71.0"
   }
 }

@@ -6,7 +6,8 @@ var {
     Animated,
     } = React;
 
-var Icon = require('./Icon');
+var ListIcon = require('./Icon');
+var { Icon } = require('react-native-icons');
 
 var ListItem = React.createClass({
 
@@ -25,7 +26,7 @@ var ListItem = React.createClass({
                     outputRange: [0, 17]
                 })
             }]}>
-                <Icon
+                <ListIcon
                     color={item.color}
                     name={item.icon}
                     flutter={flutter}
@@ -45,7 +46,14 @@ var ListItem = React.createClass({
                         <Text style={styles.title}>{item.title}</Text>
                         <Text style={styles.time}>{item.time}</Text>
                     </View>
-                    <View style={styles.info} />
+                    <View style={styles.info}>
+                        <Icon
+                            name="fontawesome|info"
+                            size={16}
+                            color="#fff"
+                            style={styles.icon}
+                            />
+                    </View>
                 </Animated.View>
             </Animated.View>
         );
@@ -72,6 +80,7 @@ var styles = StyleSheet.create({
         width: 16,
         height: 16,
         backgroundColor: '#cbcbcf',
+        color: '#fff',
         borderRadius: 8,
         marginHorizontal: 20,
     }
