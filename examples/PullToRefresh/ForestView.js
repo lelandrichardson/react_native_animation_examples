@@ -6,6 +6,8 @@ var {
     PropTypes,
     } = React;
 
+var Tree = require('./Tree');
+
 var ForestView = React.createClass({
     propTypes: {
         stretch: PropTypes.any, // Animated
@@ -52,6 +54,7 @@ var ForestView = React.createClass({
                         ]
                     }]}>
                         <View style={styles.fgHills} />
+                        <Tree />
                     </Animated.View>
                 </View>
             </View>

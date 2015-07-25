@@ -11,6 +11,7 @@ var PageScroller = require('./examples/PageScroller');
 var CoverFlow = require('./examples/CoverFlow');
 var AnimatedFormula = require('./examples/AnimatedFormula');
 var PullToRefresh = require('./examples/PullToRefresh');
+var Tree = require('./examples/PullToRefresh/Tree');
 
 var react_native_animation_examples = React.createClass({
     render: function () {
@@ -18,6 +19,7 @@ var react_native_animation_examples = React.createClass({
         //return <CoverFlow />
         //return <AnimatedFormula />
         return <PullToRefresh />
+        //return <Tree/>
     }
 });
 
