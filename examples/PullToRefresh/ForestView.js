@@ -11,9 +11,10 @@ var Tree = require('./Tree');
 var ForestView = React.createClass({
     propTypes: {
         stretch: PropTypes.any, // Animated
+        wiggle: PropTypes.any, // Animated
     },
     render: function () {
-        var { stretch } = this.props;
+        var { stretch, wiggle } = this.props;
         return (
             <View style={styles.window}>
                 <View style={styles.container}>
@@ -42,6 +43,24 @@ var ForestView = React.createClass({
                     }]}>
                         <View style={styles.mgHills1} />
                         <View style={styles.mgHills2} />
+                        <Tree
+                            height={55}
+                            wiggle={wiggle}
+                            style={{
+                                position: 'absolute',
+                                backgroundColor: 'transparent',
+                                top: -70,
+                                left: 140,
+                            }} />
+                        <Tree
+                            height={60}
+                            wiggle={wiggle}
+                            style={{
+                                position: 'absolute',
+                                backgroundColor: 'transparent',
+                                top: -75,
+                                left: 300,
+                            }} />
                     </Animated.View>
                     <Animated.View style={[styles.foreGround, {
                         transform: [
@@ -54,7 +73,15 @@ var ForestView = React.createClass({
                         ]
                     }]}>
                         <View style={styles.fgHills} />
-                        <Tree />
+                        <Tree
+                            height={70}
+                            wiggle={wiggle}
+                            style={{
+                                position: 'absolute',
+                                backgroundColor: 'transparent',
+                                top: -90,
+                                left: 280,
+                            }} />
                     </Animated.View>
                 </View>
             </View>

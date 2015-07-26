@@ -236,10 +236,14 @@ var PullToRefresh = React.createClass({
             inputRange: [-1, 0, 100],
             outputRange: [0, 0, 1]
         });
+        var wiggle = scroll.interpolate({
+            inputRange: [-101, -40, 0, 40, 101],
+            outputRange: [-1, -1, 0, 1, 1]
+        });
 
         return (
             <View style={styles.container}>
-                <ForestView stretch={stretch} />
+                <ForestView stretch={stretch} wiggle={wiggle} />
                 <Animated.View
                     contentInset={{ top: -18 }}
                     style={[{ backgroundColor: 'transparent', flex: 1 },{

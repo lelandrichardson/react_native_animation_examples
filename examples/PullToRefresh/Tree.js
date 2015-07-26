@@ -4,51 +4,36 @@ var {
     Text,
     View,
     PropTypes,
+    Animated,
     } = React;
 
 var Svg = require('react-native-svg');
 var { Path } = Svg;
-var TimerMixin = require('react-timer-mixin');
 
 var Tree = React.createClass({
-
-    mixins: [TimerMixin],
 
     propTypes: {
         bodyColor: PropTypes.string,
         trunkColor: PropTypes.string,
         height: PropTypes.number,
+        wiggle: PropTypes.any, // Animated prop
     },
 
     getDefaultProps() {
         return {
             bodyColor: '#207277',
             trunkColor: '#205e66',
-            height: 200,
+            height: 225,
+            wiggle: new Animated.Value(0),
         };
     },
 
-    getInitialState() {
-        return { wiggle: 0, up: true }
-    },
-
-    componentDidMount() {
-        this.setInterval(this.updateWiggle, 16);
-    },
-
-    updateWiggle() {
-        var { wiggle, up } = this.state;
-        wiggle = wiggle + (up ? 1 : -1) * 0.1;
-
-        this.setState({
-            wiggle,
-            up: Math.abs(wiggle) >= 0.9 ? !up : up
-        });
-    },
-
     render() {
-        var { wiggle } = this.state;
-        var { trunkColor, bodyColor, height } = this.props;
+        var { trunkColor, bodyColor, height, wiggle } = this.props;
+
+        //wiggle = wiggle.getAnimatedValue();
+
+        var width = height * 120 / 225;
 
         var abs = Math.abs(wiggle);
 
@@ -58,6 +43,13 @@ var Tree = React.createClass({
 
         var dx = wiggle * 6;
 
+        var girth = 30;
+        var x0 = 60;
+        var y0 = 225;
+        var y1 = y0-75; // bottom of tree
+        var y3 = y1-150; // top of tree
+        var y2 = y0-145; // top of trunk
+
         if (wiggle < 0) {
             var tmp = rIn;
             rIn = rOut;
@@ -65,27 +57,26 @@ var Tree = React.createClass({
         }
 
         var treeBody = `
-            M ${95 + dx} 250
-            A 30 34 0 1 0 ${155+dx} 250
-            A ${rIn*0.25} ${rIn} 0 0 ${wiggle>0 ? 1 : 0} ${125 + dx + wiggle * 50} ${100 + abs * 10}
-            A ${rOut*0.25} ${rOut} 0 0 ${wiggle>0 ? 0 : 1} ${95+dx} 250
+            M ${x0 - girth + dx} ${y1}
+            A ${girth} 34 0 1 0 ${x0 + girth + dx} ${y1}
+            A ${rIn*0.25} ${rIn} 0 0 ${wiggle>0 ? 1 : 0} ${x0 + dx + wiggle * 50} ${y3 + abs * 10}
+            A ${rOut*0.25} ${rOut} 0 0 ${wiggle>0 ? 0 : 1} ${x0 - girth + dx} ${y1}
             Z
         `;
         var trunk = `
-            M 122 325
-            A ${rTrunk*0.25} ${rTrunk} 0 0 ${wiggle>0 ? 1 : 0} ${125 + dx + wiggle * 20} ${180}
-            A ${rTrunk*0.25} ${rTrunk} 0 0 ${wiggle>0 ? 0 : 1} 128 325
+            M ${x0 - 3} ${y0}
+            A ${rTrunk*0.25} ${rTrunk} 0 0 ${wiggle>0 ? 1 : 0} ${x0 + dx + wiggle * 20} ${y2}
+            A ${rTrunk*0.25} ${rTrunk} 0 0 ${wiggle>0 ? 0 : 1} ${x0 + 3} ${y0}
             Z
         `;
         return (
             <Svg
-                width={325}
-                height={325}
-                style={{
-                    width: 325,
-                    height: 325,
-                    margin: 40,
-                }}
+                width={120}
+                height={225}
+                style={[{
+                    width: width,
+                    height: height
+                }, this.props.style]}
                 forceUpdate={treeBody}>
                 <Path
                     fill={bodyColor}
@@ -102,4 +93,4 @@ var Tree = React.createClass({
     }
 });
 
-module.exports = Tree;
+module.exports = Animated.createAnimatedComponent(Tree);
