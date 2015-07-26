@@ -82,7 +82,7 @@ var CARDY = 400;
 var START_TOP = 50;
 var h = CARDY * 0.6;
 
-var CARD_HEIGHT = 45 + 8;
+var CARD_HEIGHT = 45 + 4;
 
 var MIN = 0;
 var MAX = CARD_HEIGHT * (CARDS.length - 1);
@@ -194,16 +194,18 @@ var WindowShade = React.createClass({
         return (
             <View
                 style={styles.container}
-                {...this.responder.panHandlers}
-                >
+                {...this.responder.panHandlers}>
                 {CARDS.map((card, i) => {
-                    //var x = CARDS.length - i - 1;
-                    var hx = CARD_HEIGHT * i;
-                    var hxp = hx + CARD_HEIGHT;
+                    var h = CARD_HEIGHT;
+                    var hx = h * i;
+                    var scroll = panY.interpolate({
+                        inputRange:  [hx, HEIGHT + hx],
+                        outputRange: [ 0,      HEIGHT]
+                    });
 
-                    var translateY = panY.interpolate({
-                        inputRange: [0, hx, hxp, HEIGHT + hx, HEIGHT + hx + 1],
-                        outputRange: [0, 0, CARD_HEIGHT, HEIGHT, HEIGHT],
+                    var translateY = scroll.interpolate({
+                        inputRange:  [-h-1, -h,  0,  HEIGHT-h, HEIGHT, HEIGHT + 1],
+                        outputRange: [   0,  0, 15, HEIGHT-15, HEIGHT,     HEIGHT],
                     });
 
                     return (
