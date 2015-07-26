@@ -15,6 +15,10 @@ var ForestView = React.createClass({
     },
     render: function () {
         var { stretch, wiggle } = this.props;
+        var nwiggle = wiggle.interpolate({
+            inputRange: [0,1],
+            outputRange: [0,-1],
+        });
         return (
             <View style={styles.window}>
                 <View style={styles.container}>
@@ -45,21 +49,25 @@ var ForestView = React.createClass({
                         <View style={styles.mgHills2} />
                         <Tree
                             height={55}
-                            wiggle={wiggle}
+                            bodyColor={'#55a9aa'}
+                            trunkColor={'#619ca5'}
+                            wiggle={nwiggle}
                             style={{
                                 position: 'absolute',
                                 backgroundColor: 'transparent',
-                                top: -70,
-                                left: 140,
+                                top: -78,
+                                left: 70,
                             }} />
                         <Tree
-                            height={60}
-                            wiggle={wiggle}
+                            height={40}
+                            bodyColor={'#55a9aa'}
+                            trunkColor={'#619ca5'}
+                            wiggle={nwiggle}
                             style={{
                                 position: 'absolute',
                                 backgroundColor: 'transparent',
-                                top: -75,
-                                left: 300,
+                                top: -60,
+                                left: 58,
                             }} />
                     </Animated.View>
                     <Animated.View style={[styles.foreGround, {
@@ -74,13 +82,35 @@ var ForestView = React.createClass({
                     }]}>
                         <View style={styles.fgHills} />
                         <Tree
-                            height={70}
+                            height={86}
                             wiggle={wiggle}
                             style={{
                                 position: 'absolute',
                                 backgroundColor: 'transparent',
-                                top: -90,
-                                left: 280,
+                                top: -106,
+                                left: 276,
+                            }} />
+                        <Tree
+                            height={55}
+                            bodyColor={'#3c9599'}
+                            trunkColor={'#21656e'}
+                            wiggle={wiggle}
+                            style={{
+                                position: 'absolute',
+                                backgroundColor: 'transparent',
+                                top: -75,
+                                left: 308,
+                            }} />
+                        <Tree
+                            height={60}
+                            bodyColor={'#328a8f'}
+                            trunkColor={'#21656e'}
+                            wiggle={wiggle}
+                            style={{
+                                position: 'absolute',
+                                backgroundColor: 'transparent',
+                                top: -80,
+                                left: 260,
                             }} />
                     </Animated.View>
                 </View>

@@ -5,7 +5,7 @@
 'use strict';
 
 var React = require('react-native');
-var { AppRegistry } = React;
+var { AppRegistry, StatusBarIOS } = React;
 
 var PageScroller = require('./examples/PageScroller');
 var CoverFlow = require('./examples/CoverFlow');
@@ -15,12 +15,15 @@ var Tree = require('./examples/PullToRefresh/Tree');
 var WindowShade = require('./examples/WindowShade');
 
 var react_native_animation_examples = React.createClass({
+    componentWillMount() {
+        StatusBarIOS.setStyle('light-content');
+    },
     render: function () {
         //return <PageScroller />
         //return <CoverFlow />
         //return <AnimatedFormula />
-        //return <PullToRefresh />
-        return <WindowShade />
+        return <PullToRefresh />
+        //return <WindowShade />
         //return <Tree/>
     }
 });
