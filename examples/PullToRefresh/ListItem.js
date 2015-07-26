@@ -46,14 +46,12 @@ var ListItem = React.createClass({
                         <Text style={styles.title}>{item.title}</Text>
                         <Text style={styles.time}>{item.time}</Text>
                     </View>
-                    <View style={styles.info}>
-                        <Icon
-                            name="fontawesome|info"
-                            size={16}
-                            color="#fff"
-                            style={styles.icon}
-                            />
-                    </View>
+                    <Icon
+                        name="fontawesome|info"
+                        size={10}
+                        color="#ffffff"
+                        style={styles.info}
+                        />
                 </Animated.View>
             </Animated.View>
         );
@@ -77,11 +75,11 @@ var styles = StyleSheet.create({
         fontSize: 14
     },
     info: {
+        textAlign: 'center',
         width: 16,
         height: 16,
-        backgroundColor: '#cbcbcf',
-        color: '#fff',
         borderRadius: 8,
+        backgroundColor: '#cbcbcf',
         marginHorizontal: 20,
     }
 });
