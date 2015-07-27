@@ -60,7 +60,7 @@ var PanController = React.createClass({
     getDefaultProps() {
         return {
             allowX: false,
-            allowY: true,
+            allowY: true, //TODO: would it make more sense to make this false by default, but a better name?
             momentumX: true,
             momentumY: true,
             lockDirection: true,
@@ -82,6 +82,9 @@ var PanController = React.createClass({
         // it's possible we want to move some props over to state.
         // For example, xBounds/yBounds might need to be
         // calculated/updated automatically
+        //
+        // This could also be done with a higher-order component
+        // that just massages props passed in...
         return {
 
         };
