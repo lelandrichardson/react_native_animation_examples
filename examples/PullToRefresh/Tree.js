@@ -43,9 +43,9 @@ var Tree = React.createClass({
 
         var dx = wiggle * 6;
 
-        var girth = 30;
-        var x0 = 60;
-        var y0 = 225;
+        var girth = 25; // half-width of tree body
+        var x0 = 60; // left-offset of trunk center
+        var y0 = 225; // y offset of trunk bottom
         var y1 = y0-75; // bottom of tree
         var y3 = y1-150; // top of tree
         var y2 = y0-145; // top of trunk
@@ -58,7 +58,7 @@ var Tree = React.createClass({
 
         var treeBody = `
             M ${x0 - girth + dx} ${y1}
-            A ${girth} 34 0 1 0 ${x0 + girth + dx} ${y1}
+            A ${girth} ${girth + 4} 0 1 0 ${x0 + girth + dx} ${y1}
             A ${rIn*0.25} ${rIn} 0 0 ${wiggle>0 ? 1 : 0} ${x0 + dx + wiggle * 50} ${y3 + abs * 10}
             A ${rOut*0.25} ${rOut} 0 0 ${wiggle>0 ? 0 : 1} ${x0 - girth + dx} ${y1}
             Z

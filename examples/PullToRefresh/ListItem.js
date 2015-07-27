@@ -31,7 +31,7 @@ var ListItem = React.createClass({
                     name={item.icon}
                     flutter={flutter}
                     />
-                <Animated.View style={[{ flexDirection: 'row', flex: 1}, {
+                <Animated.View style={[styles.innerBody, {
                     transform: [
                         {
                             rotateY: loading.interpolate({
@@ -74,6 +74,12 @@ var styles = StyleSheet.create({
         color: '#777',
         fontSize: 14
     },
+    innerBody: {
+        flexDirection: 'row',
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
     info: {
         textAlign: 'center',
         width: 16,
@@ -81,6 +87,7 @@ var styles = StyleSheet.create({
         borderRadius: 8,
         backgroundColor: '#cbcbcf',
         marginHorizontal: 20,
+
     }
 });
 

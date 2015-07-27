@@ -17,9 +17,8 @@ var Dimensions = require('Dimensions');
 var Easing = require('Easing');
 var Interpolation = require('Interpolation');
 var { width, height } = Dimensions.get('window');
-var MatrixMath = require('MatrixMath');
 
-var THREE = require('three');
+var PanController = require('../PanController');
 
 var IMAGES = [
     require('image!0-cnn1'),
@@ -35,60 +34,6 @@ var IMAGES = [
 // http://codepen.io/anon/pen/ZGjvwo?editors=011
 // http://www.eleqtriq.com/2010/05/css-3d-matrix-transformations/
 
-function matrix3d() {
-    return Array.prototype.slice.call(arguments,0);
-}
-
-function toRadians(degree) {
-    return degree * (Math.PI/180);
-}
-function toDegrees(radians) {
-    return radians * (180/Math.PI);
-}
-function compose(args) {
-    var result = new THREE.Matrix4();
-    for (var i = 0; i < args.length; i ++) {
-        result = result.multiply(args[i]);
-    }
-    return result;
-}
-function M() {
-    return new THREE.Matrix4();
-}
-function V(x,y,z) {
-    return new THREE.Vector3(x,y,z)
-}
-function Q() {
-    return new THREE.Quaternion();
-}
-
-var T = compose([
-    //M().makeTranslation(0,0,100),
-    //M().makeRotationY(toRadians(45)),
-    //M().makeTranslation(-100, 0, 0),
-    //M().makeOrthographic(-10, 10, 4, -4,-1,1),
-    //M().makeRotationY(toRadians(45)),
-    //M().makeRotationFromQuaternion(Q().setFromRotationMatrix(M().makeRotationZ(toRadians(45)))),
-    //M().makePerspective(45, 1, 0.1, 100),
-    //M().makeScale(1,2,0),
-    //M().scale(V(1, 1, 0)),
-    M()
-]);
-
-
-var t = [].slice.call(T.elements,0);
-
-/*
-matrix3d(
-        scaleX,           +0.0,            +0.0,          rotateY,
-          +0.0,         scaleY,            +0.0,          rotateX,
-          +0.0,           +0.0,            +1.0,             +0.0,
-    translateX,     translateY,            +0.0,          1/scale
-);
-
-*/
-
-
 
 var MAXROTATE = 0.0035;
 var dCenter = 120;
@@ -101,11 +46,9 @@ var CoverFlow = React.createClass({
 
     getInitialState() {
         var x = new Animated.Value(0);
-        var vx = new Animated.Value(0);
         return {
             x,
-            vx,
-            translations: IMAGES.map((_,i) => x.interpolate({
+            translations: IMAGES.map((_, i) => x.interpolate({
                 inputRange:  [ SPACING*i, SPACING*(i+1)],
                 outputRange: [         0,       SPACING]
             }))
@@ -114,24 +57,24 @@ var CoverFlow = React.createClass({
 
     componentWillMount() {
         this.responder = PanResponder.create({
-            onStartShouldSetPanResponder: () => true,
-            onMoveShouldSetPanResponder: () => true,
-            onPanResponderGrant: () => {
-                this.state.x.setOffset(this.state.x._value);
-                this.state.x.setValue(0);
-            },
-            onPanResponderMove: (_, { dx, x0 }) => {
-                var x = this.state.x._offset + dx;
-
-                if (x > MAX) {
-                    x = MAX + (x - MAX) / 3;
-                }
-                if (x < MIN) {
-                    x = MIN - (MIN - x) / 3;
-                }
-                x = x - this.state.x._offset;
-                this.state.x.setValue(x);
-            },
+            //onStartShouldSetPanResponder: () => true,
+            //onMoveShouldSetPanResponder: () => true,
+            //onPanResponderGrant: () => {
+            //    this.state.x.setOffset(this.state.x._value);
+            //    this.state.x.setValue(0);
+            //},
+            //onPanResponderMove: (_, { dx, x0 }) => {
+            //    var x = this.state.x._offset + dx;
+            //
+            //    if (x > MAX) {
+            //        x = MAX + (x - MAX) / 3;
+            //    }
+            //    if (x < MIN) {
+            //        x = MIN - (MIN - x) / 3;
+            //    }
+            //    x = x - this.state.x._offset;
+            //    this.state.x.setValue(x);
+            //},
             onPanResponderRelease: (_, { vx, dx }) => {
                 var { x } = this.state;
                 x.flattenOffset();
@@ -187,7 +130,7 @@ var CoverFlow = React.createClass({
         while (true) {
             t += 16;
             x = x0 + (vx / (1 - deceleration)) *
-                      (1 - Math.exp(-(1 - deceleration) * t));
+                (1 - Math.exp(-(1 - deceleration) * t));
             if (Math.abs(x-x1) < 0.1) {
                 x1 = x;
                 break;
@@ -224,53 +167,52 @@ var CoverFlow = React.createClass({
         var { x, translations } = this.state;
 
         return (
-            <View
+            <PanController
                 style={styles.container}
-                {...this.responder.panHandlers}
+                allowX={true}
+                allowY={false}
+                overshootX="spring"
+                xBounds={[MIN, MAX]}
+                panX={x}
                 >
                 {IMAGES.map((img, i) => {
 
                     var dx = translations[i];
 
-                    var translateX = {
-                        translateX: dx
-                    };
-                    var perspective = {
-                        perspective: dx.interpolate({
-                            inputRange: [-dCenter-1, -dCenter, 0, dCenter, dCenter+1],
-                            outputRange: [400, 400, 100, 400, 400]
-                        })
-                    };
-                    var translateY = {
-                        translateY: dx.interpolate({
-                            inputRange:  [-dCenter-1, -dCenter,   0, dCenter, dCenter+1],
-                            outputRange: [         0,        0, -10,       0,         0]
-                        })
-                    };
-                    var scale = {
-                        scale: dx.interpolate({
-                            inputRange:  [-dCenter-1, -dCenter,   0, dCenter, dCenter+1],
-                            outputRange: [         1,        1, 1.6,       1,         1]
-                        })
-                    };
-                    var rotateY = {
-                        rotateY: dx.interpolate({
-                            inputRange:  [-dCenter-1, -dCenter,      0,  dCenter, dCenter+1],
-                            outputRange: [   '35deg',  '35deg', '0deg', '-35deg',  '-35deg']
-                        })
-                    };
+                    var translateX = dx;
+                    var perspective = dx.interpolate({
+                        inputRange: [-dCenter-1, -dCenter, 0, dCenter, dCenter+1],
+                        outputRange: [400, 400, 100, 400, 400]
+                    });
+                    var translateY = dx.interpolate({
+                        inputRange:  [-dCenter-1, -dCenter,   0, dCenter, dCenter+1],
+                        outputRange: [         0,        0, -10,       0,         0]
+                    });
+                    var scale = dx.interpolate({
+                        inputRange:  [-dCenter-1, -dCenter,   0, dCenter, dCenter+1],
+                        outputRange: [         1,        1, 1.6,       1,         1]
+                    });
+                    var rotateY = dx.interpolate({
+                        inputRange:  [-dCenter-1, -dCenter,      0,  dCenter, dCenter+1],
+                        outputRange: [   '35deg',  '35deg', '0deg', '-35deg',  '-35deg']
+                    });
 
                     return (
                         <Animated.Image
                             key={i}
                             style={[styles.image, {
-                                transform: [ perspective, translateX, translateY, scale, rotateY ]
+                                transform: [
+                                    {perspective},
+                                    {translateX},
+                                    {translateY},
+                                    {scale},
+                                    {rotateY},
+                                ],
                             }]}
                             source={img} />
                     );
                 })}
-
-            </View>
+            </PanController>
         );
     }
 });

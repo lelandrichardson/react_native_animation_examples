@@ -82,9 +82,10 @@ var CARDY = 400;
 var START_TOP = 50;
 var h = CARDY * 0.6;
 
-var CARD_HEIGHT = 45 + 4;
+var CARD_HEIGHT = 45;
 
-var MIN = 0;
+var HEIGHT = 220;
+var MIN = HEIGHT - CARD_HEIGHT; // or 0 in the "open" mode
 var MAX = CARD_HEIGHT * (CARDS.length - 1);
 var MARGIN = 30;
 
@@ -190,7 +191,7 @@ var WindowShade = React.createClass({
 
     render: function () {
         var { panY } = this.state;
-        var HEIGHT = 300 // height - 2 * MARGIN - CARD_HEIGHT;
+        // var HEIGHT = height - 2 * MARGIN - CARD_HEIGHT;
         return (
             <View
                 style={styles.container}
@@ -198,6 +199,12 @@ var WindowShade = React.createClass({
                 {CARDS.map((card, i) => {
                     var h = CARD_HEIGHT;
                     var hx = h * i;
+                    var ni = CARDS.length - i - 1; // reverse index
+                    var hnx = h * ni;
+
+                    /**
+                     * This is the scroll effect when the shade is "open" already
+                     */
                     var scroll = panY.interpolate({
                         inputRange:  [hx, HEIGHT + hx],
                         outputRange: [ 0,      HEIGHT]
@@ -208,6 +215,50 @@ var WindowShade = React.createClass({
                         outputRange: [   0,  0, 15, HEIGHT-15, HEIGHT,     HEIGHT],
                     });
 
+                    // we only want some of the cards to have a shadow, or else they all add up
+                    // to be really dark whenever they stack on top of each other.
+                    var shadowOpacity = panY.interpolate({
+                        inputRange:  [hx-h-h-1,   hx-h-h, HEIGHT+hx, HEIGHT+hx+1],
+                        outputRange: [     0,    0.5,    0.5,        0],
+                    });
+
+                    /**
+                     * This is the scroll effect when the shade is getting pulled
+                     * down for the first time
+                     */
+                    //var restPosMinusH = Math.max(hnx-h, 0);
+                    //var restPos = Math.min(hnx, HEIGHT);
+                    //var restPosPlusH = Math.min(hnx+h, HEIGHT);
+                    //
+                    //var translateY = panY.interpolate({
+                    //    inputRange:  [0, restPosMinusH,                 restPos, restPosPlusH, HEIGHT+1,  HEIGHT+2],
+                    //    outputRange: [0, restPosMinusH, Math.max(restPos-12, 0),      restPos,  restPos, restPos+1]
+                    //});
+                    //
+                    //if (restPos !== restPosPlusH && restPosPlusH === HEIGHT) {
+                    //    translateY = panY.interpolate({
+                    //        inputRange:  [0, restPos, HEIGHT,  HEIGHT+1],
+                    //        outputRange: [0, restPos-12, restPos-12, restPos-12+1]
+                    //    });
+                    //} else if (restPos === restPosPlusH) {
+                    //    translateY = panY.interpolate({
+                    //        inputRange:  [0, restPos, HEIGHT,  HEIGHT+1],
+                    //        outputRange: [0, restPos, restPos, restPos+1]
+                    //    });
+                    //}
+                    //
+                    //// we only want some of the cards to have a shadow, or else they all add up
+                    //// to be quite dark whenever they stack on top of each other.
+                    //var shadowStart = hnx-2*h;
+                    //
+                    //// some items will still be overlapping during an "overscroll", and in this
+                    //// case, we still want to show a shadow...
+                    //var shadowStop = hnx+2*h > HEIGHT ? Infinity : hnx+2*h;
+                    //var shadowOpacity = panY.interpolate({
+                    //    inputRange:  [shadowStart-1, shadowStart, shadowStop, shadowStop+1],
+                    //    outputRange: [            0,         0.5,        0.5,            0],
+                    //});
+
                     return (
                         <Animated.View
                             key={card.id}
@@ -217,9 +268,10 @@ var WindowShade = React.createClass({
                                 right: 30,
                                 top: 30,
                                 backgroundColor: 'transparent',
-                                transform: [
-                                    { translateY }
-                                ],
+                                transform: [{ translateY }],
+                                shadowOpacity,
+                                shadowRadius: 6,
+                                shadowColor: '#000000',
                             }}>
                             <Card card={card} />
                         </Animated.View>

@@ -44,7 +44,38 @@ var Ferrisel = React.createClass({
     }
 })
 
-
+/**
+ * PanSurface API:
+ * ============
+ *
+ * allowX (boolean) [false]
+ * allowY (boolean) [true]
+ * momentum (boolean|enum("x","y")) [true]
+ * lockScrollDirection (boolean) [true]
+ * panX (AnimatedValue)
+ * panY (AnimatedValue)
+ * vx (AnimatedValue)
+ * vy (AnimatedValue)
+ * xBounds (number[2]) [0, measure(children).width]
+ * yBounds (number[2]) [0, measure(children).height]
+ * overshoot (enum("spring", "clamp", "extend")) ["spring"]
+ * xMode (enum("scroll-with-momentum-based-decay", "spring-back-to-origin-on-release"))
+ * ...PanResponderHandlers
+ *
+ *
+ *
+ *
+ * Additional Scenarios:
+ * =====================
+ *
+ * - snap back to a specific point after touch release
+ * - snap to pages with some interval (or array of points?)
+ * - support a "mode" for each direction of the following:
+ *      - "scroll": scroll with momentum based decay
+ *      - "spring": spring back to origin on release
+ *      - "pan": stop moving on release
+ *
+ */
 var Ferrisel = React.createClass({
     render() {
         return (

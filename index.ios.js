@@ -20,9 +20,9 @@ var react_native_animation_examples = React.createClass({
     },
     render: function () {
         //return <PageScroller />
-        //return <CoverFlow />
+        return <CoverFlow />
         //return <AnimatedFormula />
-        return <PullToRefresh />
+        //return <PullToRefresh />
         //return <WindowShade />
         //return <Tree/>
     }

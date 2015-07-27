@@ -18,6 +18,8 @@ var Easing = require('Easing');
 var Interpolation = require('Interpolation');
 var { width, height } = Dimensions.get('window');
 
+var PanController = require('../PanController');
+
 var IMAGES = [
     require('image!0-cnn1'),
     require('image!1-facebook1'),
@@ -64,11 +66,11 @@ var PageScroller = React.createClass({
     direction: null,
     componentWillMount() {
         this.responder = PanResponder.create({
-            onStartShouldSetPanResponder: () => true,
-            onMoveShouldSetPanResponder: () => true,
+            //onStartShouldSetPanResponder: () => true,
+            //onMoveShouldSetPanResponder: () => true,
             onPanResponderGrant: () => {
-                this.state.panY.setOffset(this.state.panY.getAnimatedValue());
-                this.state.panY.setValue(0);
+                //this.state.panY.setOffset(this.state.panY.getAnimatedValue());
+                //this.state.panY.setValue(0);
                 this.state.panX.setValue(0);
                 this.direction = null;
             },
@@ -202,35 +204,40 @@ var PageScroller = React.createClass({
     render: function () {
         var { panY, panX, swipeIndex } = this.state;
         return (
-            <View
+            <PanController
                 style={styles.container}
-                {...this.responder.panHandlers}
+                allowX={true}
+                allowY={true}
+                panX={panX}
+                panY={panY}
                 >
                 {PANES.map((e, i) => {
                     var x = PANES.length - i - 1;
                     var hx = h * x;
                     var hxm = Math.max(hx-h, 0);
 
-                    var translateX = {
-                        translateX: i === swipeIndex && this.direction === 'x' ? panX : 0
-                    };
+                    var translateX = i === swipeIndex && this.direction === 'x' ? panX : 0;
+
+                    var translateY = panY.interpolate({
+                        inputRange: [0, hxm, hx+1, height+hx],
+                        outputRange: [0, 0, 10, 30 + height],
+                        easing: easing
+                    });
+
+                    var scale = panY.interpolate({
+                        inputRange: [0, hx+1, 0.8*height+hx, height+hx, height + hx + 1],
+                        outputRange: [1, 1, 1.4, 1.3, 1.3]
+                    });
 
                     return <Pane key={i} i={i} style={{
-                        transform: [translateX, {
-                            translateY: panY.interpolate({
-                                inputRange: [0, hxm, hx+1, height+hx],
-                                outputRange: [0, 0, 10, 30 + height],
-                                easing: easing
-                            })
-                        }, {
-                            scale: panY.interpolate({
-                                inputRange: [0, hx+1, 0.8*height+hx, height+hx, height + hx + 1],
-                                outputRange: [1, 1, 1.4, 1.3, 1.3]
-                            })
-                        }]
+                        transform: [
+                            {translateX},
+                            {translateY},
+                            {scale},
+                        ],
                     }} />
                 })}
-            </View>
+            </PanController>
         );
     }
 });

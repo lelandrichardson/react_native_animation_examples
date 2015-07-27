@@ -25,10 +25,6 @@ var styles = StyleSheet.create({
         backgroundColor: '#fff',
         paddingHorizontal: 20,
         paddingVertical: 14,
-        shadowRadius: 6,
-        shadowColor: '#000000',
-        shadowOffset: { top: 0, left: 0 },
-        shadowOpacity: 0.5,
     }
 });
 
